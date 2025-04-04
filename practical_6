@@ -1,0 +1,80 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+
+data = pd.read_csv("diabetes.csv")
+data
+
+Pregnancies	Glucose	BloodPressure	SkinThickness	Insulin	BMI	DiabetesPedigreeFunction	Age	Outcome
+0	6	148	72	35	0	33.6	0.627	50	1
+1	1	85	66	29	0	26.6	0.351	31	0
+2	8	183	64	0	0	23.3	0.672	32	1
+3	1	89	66	23	94	28.1	0.167	21	0
+4	0	137	40	35	168	43.1	2.288	33	1
+...	...	...	...	...	...	...	...	...	...
+763	10	101	76	48	180	32.9	0.171	63	0
+764	2	122	70	27	0	36.8	0.340	27	0
+765	5	121	72	23	112	26.2	0.245	30	0
+766	1	126	60	0	0	30.1	0.349	47	1
+767	1	93	70	31	0	30.4	0.315	23	0
+768 rows × 9 columns
+
+data.isnull().sum()
+Pregnancies                 0
+Glucose                     0
+BloodPressure               0
+SkinThickness               0
+Insulin                     0
+BMI                         0
+DiabetesPedigreeFunction    0
+Age                         0
+Outcome                     0
+dtype: int64
+
+data = pd.get_dummies(data, drop_first=True)
+x = data[['Pregnancies','Glucose','BloodPressure','SkinThickness','Insulin','BMI','DiabetesPedigreeFunction','Age']]
+y = data['Outcome']
+
+X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0)
+print("yes")
+
+yes
+
+from sklearn.naive_bayes import GaussianNB
+gaussian = GaussianNB()
+gaussian.fit(X_train, y_train)
+
+GaussianNB()
+In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook.
+On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.
+
+Y_pred = gaussian.predict(X_test)
+Y_pred
+
+ 
+array([1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0,
+       0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1,
+       1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1,
+       1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1,
+       0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      dtype=int64)
+
+from sklearn.metrics import precision_score,confusion_matrix,accuracy_score,recall_score
+cm = confusion_matrix(y_test, Y_pred)
+
+accuracy = accuracy_score(y_test,Y_pred)
+precision =precision_score(y_test, Y_pred,average='micro')
+recall = recall_score(y_test, Y_pred,average='micro')
+
+accuracy
+0.7922077922077922
+
+precision 
+0.7922077922077922
+
+recall
+0.792207792207792
